@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>testing site // authorized access</title>
+
+  <style>
+    :root {
+      --bg: #050505;
+      --panel: #0b0b0b;
+      --border: #222;
+      --text: #ddd;
+      --muted: #777;
+      --green: #00ff88;
+      --red: #ff3b3b;
+      --yellow: #ffd43b;
+      --blue: #4da6ff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family:
+        Consolas,
+        Monaco,
+        monospace;
+    }
+
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 18px 6%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .title {
+      color: var(--green);
+      font-weight: bold;
+    }
+
+    .online {
+      color: var(--green);
+      font-size: 13px;
+    }
+
+    .dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      background: var(--green);
+      border-radius: 50%;
+      margin-right: 6px;
+      box-shadow: 0 0 10px var(--green);
+    }
+
+    main {
+      width: min(1100px, 90%);
+      margin: auto;
+      padding: 60px 0;
+    }
+
+    .hero {
+      max-width: 800px;
+    }
+
+    .small {
+      color: var(--green);
+      font-size: 13px;
+      margin-bottom: 15px;
+    }
+
+    h1 {
+      font-size: clamp(38px, 7vw, 75px);
+      line-height: 0.95;
+      margin: 0;
+      letter-spacing: -4px;
+    }
+
+    .description {
+      color: var(--muted);
+      line-height: 1.7;
+      margin-top: 25px;
+    }
+
+    .notice {
+      margin-top: 25px;
+      padding: 15px;
+      border: 1px solid #393000;
+      background: #111000;
+      color: #b9aa60;
+      line-height: 1.6;
+      font-size: 13px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 35px;
+    }
+
+    .stat {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      padding: 20px;
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      margin-bottom: 13px;
+    }
+
+    .stat-value {
+      font-size: 25px;
+      font-weight: bold;
+    }
+
+    .green {
+      color: var(--green);
+    }
+
+    .red {
+      color: var(--red);
+    }
+
+    .yellow {
+      color: var(--yellow);
+    }
+
+    .blue {
+      color: var(--blue);
+    }
+
+    section {
+      margin-top: 45px;
+    }
+
+    h2 {
+      font-size: 17px;
+      margin-bottom: 15px;
+    }
+
+    .terminal {
+      background: #020202;
+      border: 1px solid var(--border);
+    }
+
+    .terminal-header {
+      padding: 10px 15px;
+      border-bottom: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    #logs {
+      padding: 20px;
+      min-height: 230px;
+      max-height: 350px;
+      overflow-y: auto;
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .log-time {
+      color: #555;
+    }
+
+    .log-ok {
+      color: var(--green);
+    }
+
+    .log-warn {
+      color: var(--yellow);
+    }
+
+    .log-danger {
+      color: var(--red);
+    }
+
+    .tools {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .tool {
+      border: 1px solid var(--border);
+      background: var(--panel);
+      padding: 20px;
+    }
+
+    .tool h3 {
+      margin: 0 0 10px;
+      font-size: 15px;
+    }
+
+    .tool p {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+      min-height: 55px;
+    }
+
+    button {
+      background: #0e0e0e;
+      border: 1px solid #333;
+      color: #ccc;
+      padding: 9px 13px;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    button:hover {
+      border-color: var(--green);
+      color: var(--green);
+    }
+
+    .request {
+      display: grid;
+      grid-template-columns: 100px 1fr 100px;
+      gap: 10px;
+    }
+
+    input,
+    select {
+      background: #080808;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 10px;
+      font-family: inherit;
+      width: 100%;
+    }
+
+    #response {
+      margin-top: 12px;
+      background: #020202;
+      border: 1px solid var(--border);
+      padding: 15px;
+      white-space: pre-wrap;
+      color: var(--muted);
+      min-height: 100px;
+      font-size: 12px;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      margin-top: 60px;
+      padding-top: 20px;
+      color: #555;
+      font-size: 11px;
+      line-height: 1.7;
+    }
+
+    @media(max-width: 750px) {
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .tools {
+        grid-template-columns: 1fr;
+      }
+
+      .request {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media(max-width: 450px) {
+      .stats {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+
+  <div class="title">
+    ~/testing-site
+  </div>
+
+  <div class="online">
+    <span class="dot"></span>
+    ONLINE
+  </div>
+
+</header>
+
+<main>
+
+  <div class="hero">
+
+    <div class="small">
+      PERSONAL SECURITY TESTING ENVIRONMENT
+    </div>
+
+    <h1>
+      nothing important<br>
+      is running here.
+    </h1>
+
+    <p class="description">
+      This is a deliberately isolated testing website for experimenting
+      with security tools, scanners, monitoring software, HTTP requests,
+      rate-limit behavior and other authorized security research.
+    </p>
+
+    <div class="notice">
+      <strong>NOTICE:</strong>
+      This site is intentionally available for authorized testing.
+      Do not use testing tools against systems you do not own or have
+      permission to test.
+    </div>
+
+  </div>
+
+
+  <!-- STATISTICS -->
+
+  <div class="stats">
+
+    <div class="stat">
+      <div class="stat-label">
+        Uptime
+      </div>
+
+      <div class="stat-value green">
+        99.99%
+      </div>
+    </div>
+
+
+    <div class="stat">
+      <div class="stat-label">
+        Requests
+      </div>
+
+      <div
+        class="stat-value blue"
+        id="requests"
+      >
+        0
+      </div>
+    </div>
+
+
+    <div class="stat">
+      <div class="stat-label">
+        Traffic tested
+      </div>
+
+      <div
+        class="stat-value red"
+        id="traffic"
+      >
+        0 GB
+      </div>
+    </div>
+
+
+    <div class="stat">
+      <div class="stat-label">
+        Security tests
+      </div>
+
+      <div
+        class="stat-value yellow"
+        id="tests"
+      >
+        0
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- TERMINAL -->
+
+  <section>
+
+    <h2>
+      live activity
+    </h2>
+
+    <div class="terminal">
+
+      <div class="terminal-header">
+        request-monitor.log
+      </div>
+
+      <div id="logs">
+
+        <div>
+          <span class="log-time">
+            [boot]
+          </span>
+
+          <span class="log-ok">
+            testing environment started
+          </span>
+        </div>
+
+        <div>
+          <span class="log-time">
+            [boot]
+          </span>
+
+          <span class="log-ok">
+            monitoring enabled
+          </span>
+        </div>
+
+        <div>
+          <span class="log-time">
+            [boot]
+          </span>
+
+          <span class="log-ok">
+            waiting for requests...
+          </span>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- TESTING TOOLS -->
+
+  <section>
+
+    <h2>
+      things you can test
+    </h2>
+
+    <div class="tools">
+
+      <div class="tool">
+
+        <h3>
+          HTTP
+        </h3>
+
+        <p>
+          Test HTTP methods, response handling and request inspection.
+        </p>
+
+        <button onclick="runTest('HTTP request')">
+          simulate
+        </button>
+
+      </div>
+
+
+      <div class="tool">
+
+        <h3>
+          Headers
+        </h3>
+
+        <p>
+          Inspect security-related HTTP headers and browser behavior.
+        </p>
+
+        <button onclick="runTest('header inspection')">
+          simulate
+        </button>
+
+      </div>
+
+
+      <div class="tool">
+
+        <h3>
+          Rate limits
+        </h3>
+
+        <p>
+          Test how your monitoring software reacts to increasing request
+          rates using local simulation.
+        </p>
+
+        <button onclick="runTest('rate-limit test')">
+          simulate
+        </button>
+
+      </div>
+
+
+      <div class="tool">
+
+        <h3>
+          Error handling
+        </h3>
+
+        <p>
+          Experiment with different simulated HTTP response codes.
+        </p>
+
+        <button onclick="runTest('error handling')">
+          simulate
+        </button>
+
+      </div>
+
+
+      <div class="tool">
+
+        <h3>
+          Input testing
+        </h3>
+
+        <p>
+          Send harmless test strings through the site's local testing
+          interface.
+        </p>
+
+        <button onclick="runTest('input validation')">
+          simulate
+        </button>
+
+      </div>
+
+
+      <div class="tool">
+
+        <h3>
+          Traffic monitoring
+        </h3>
+
+        <p>
+          Observe simulated traffic statistics and monitoring events.
+        </p>
+
+        <button onclick="runTest('traffic monitoring')">
+          simulate
+        </button>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- REQUEST SIMULATOR -->
+
+  <section>
+
+    <h2>
+      request simulator
+    </h2>
+
+    <div class="request">
+
+      <select id="method">
+
+        <option>GET</option>
+        <option>POST</option>
+        <option>PUT</option>
+        <option>PATCH</option>
+        <option>DELETE</option>
+        <option>HEAD</option>
+
+      </select>
+
+
+      <input
+        id="endpoint"
+        value="/api/test"
+        placeholder="/api/test"
+      >
+
+
+      <button onclick="sendRequest()">
+        send
+      </button>
+
+    </div>
+
+
+    <div id="response">
+      No request simulated yet.
+    </div>
+
+  </section>
+
+
+  <footer>
+
+    This is a personal testing environment.
+
+    <br>
+
+    Statistics shown on this page are demonstration data generated
+    by JavaScript unless explicitly connected to a backend.
+
+    <br><br>
+
+    Authorized testing only.
+
+  </footer>
+
+</main>
+
+
+<script>
+
+  let requests = 0;
+  let tests = 0;
+  let traffic = 0;
+
+
+  function timestamp() {
+
+    return new Date().toLocaleTimeString();
+
+  }
+
+
+  function log(message, type = "ok") {
+
+    const logs = document.getElementById("logs");
+
+    const line = document.createElement("div");
+
+    line.innerHTML =
+      `<span class="log-time">[${timestamp()}]</span>
+       <span class="log-${type}">${message}</span>`;
+
+    logs.appendChild(line);
+
+    logs.scrollTop = logs.scrollHeight;
+
+  }
+
+
+  function runTest(name) {
+
+    tests++;
+
+    document.getElementById("tests")
+      .textContent = tests.toLocaleString();
+
+    log(
+      `security test started: ${name}`,
+      "warn"
+    );
+
+
+    setTimeout(() => {
+
+      log(
+        `${name}: test completed`,
+        "ok"
+      );
+
+    }, 700);
+
+  }
+
+
+  function sendRequest() {
+
+    const method =
+      document.getElementById("method").value;
+
+    const endpoint =
+      document.getElementById("endpoint").value || "/";
+
+
+    requests++;
+
+    traffic += Math.random() * 0.004;
+
+
+    document.getElementById("requests")
+      .textContent = requests.toLocaleString();
+
+    document.getElementById("traffic")
+      .textContent = traffic.toFixed(2) + " GB";
+
+
+    document.getElementById("response")
+      .textContent =
+`HTTP/1.1 200 OK
+
+Server: testing-site
+Content-Type: application/json
+X-Test-Environment: true
+
+{
+  "status": "ok",
+  "method": "${method}",
+  "path": "${endpoint}",
+  "simulation": true
+}`;
+
+
+    log(
+      `${method} ${endpoint} → 200`,
+      "ok"
+    );
+
+  }
+
+
+  /*
+   * Fake background activity.
+   * This does not send network traffic.
+   */
+
+  setInterval(() => {
+
+    const randomIncrease =
+      Math.floor(Math.random() * 5);
+
+    requests += randomIncrease;
+
+    document.getElementById("requests")
+      .textContent = requests.toLocaleString();
+
+  }, 2500);
+
+
+  /*
+   * Fake traffic statistic.
+   */
+
+  setInterval(() => {
+
+    traffic += Math.random() * 0.02;
+
+    document.getElementById("traffic")
+      .textContent = traffic.toFixed(2) + " GB";
+
+  }, 3000);
+
+</script>
+
+</body>
+</html>
